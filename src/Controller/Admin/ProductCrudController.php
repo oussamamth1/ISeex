@@ -46,6 +46,7 @@ class ProductCrudController extends AbstractCrudController
             //TextareaField::new('imageFile')->setFormType(VichImageType::class)->hideOnIndex(),
             AssociationField::new('category'),
             AssociationField::new('publish')->hideOnForm(),
+            AssociationField::new('client'),
             BooleanField::new('status'),
             BooleanField::new('StatusF'),
             NumberField::new('price'),

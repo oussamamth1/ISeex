@@ -90,15 +90,17 @@ class Product
      */
     private $publish;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Machine::class, mappedBy="article")
-     */
-    private $machines;
+  
 
     /**
      * @ORM\Column(type="boolean")
      */
     private $StatusF;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="typeClient")
+     */
+    private $client;
 
     public function __construct()
     {
@@ -224,32 +226,10 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection|Machine[]
-     */
-    public function getMachines(): Collection
-    {
-        return $this->machines;
-    }
+   
+   
 
-    public function addMachine(Machine $machine): self
-    {
-        if (!$this->machines->contains($machine)) {
-            $this->machines[] = $machine;
-            $machine->addArticle($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMachine(Machine $machine): self
-    {
-        if ($this->machines->removeElement($machine)) {
-            $machine->removeArticle($this);
-        }
-
-        return $this;
-    }
+   
   
     public function __toString()
     {
@@ -264,6 +244,18 @@ class Product
     public function setStatusF(bool $StatusF): self
     {
         $this->StatusF = $StatusF;
+
+        return $this;
+    }
+
+    public function getClient(): ?Client
+    {
+        return $this->client;
+    }
+
+    public function setClient(?Client $client): self
+    {
+        $this->client = $client;
 
         return $this;
     }

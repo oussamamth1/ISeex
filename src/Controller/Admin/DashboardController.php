@@ -6,7 +6,9 @@ use App\Entity\Post;
 use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Client;
 use App\Entity\Machine;
+use App\Entity\Ouvier;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -39,6 +41,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Ordre De Fabrication', 'fa fa-newspaper-o', Product::class);
         yield MenuItem::linkToCrud('User Posts', 'fa fa-commenting-o', Post::class);
         yield MenuItem::linkToCrud('Machine', '	fa fa-cogs', Machine::class);
+        yield MenuItem::linkToCrud('Client type', '	fa fa-cogs', Client::class);
+        yield MenuItem::linkToCrud('Ouvier', '	fa fa-drivers-license', Ouvier::class);
         if($this->IsGranted('ROLE_ADMIN')){    yield MenuItem::linkToCrud('user', 'fa fa-group', User::class);}
     
     }
