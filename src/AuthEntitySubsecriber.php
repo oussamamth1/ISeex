@@ -13,16 +13,18 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponesForControllerResultEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Symfony\Component\Security\Core\Security;
 
 class AuthEntitySubsecriber implements EventSubscriberInterface{
     /**
      * @var TokenStorageInterface
      */
     private $tokenStorage;
-    public function __construct(TokenStorageInterface $tokenStorage)
+    private Security $security;
+    public function __construct(TokenStorageInterface $tokenStorage,Security $security)
     {
 $this->tokenStorage=$tokenStorage;  
+$this->security=$security;
         
     }
      public static function getSubscribedEvents()
@@ -31,18 +33,18 @@ $this->tokenStorage=$tokenStorage;
      }
 public function getAuthenticatedUser(ViewEvent $event){
 
-             $entity=$event->getControllerResult();
-             $getauth=$event->getControllerResult();
+             $auth=$event->getControllerResult();
+             $metthodauth=$event->getControllerResult();
              $methode=$event->getRequest()->getMethod();
             
-             $email=$this->tokenStorage->getToken()->getUsername();
-             $auth=$this->tokenStorage->getToken()->getUser();
-            if($entity instanceof Post ){
-                 $entity->setTitle($auth);
-           }
-           if($getauth instanceof Post ){
-                $getauth->setUserpost($auth);
-       }
+        //      $email=$this->tokenStorage->getToken()->getUsername();
+        //     $auth=$this->tokenStorage->getToken()->getUser();
+        //     if($auth instanceof Post ){
+        //          $auth->setTitle($this->security->getUser());
+        //    }
+    //        if($getauth instanceof Post ){
+    //             $getauth->setUserpost($auth);
+    //    }
   
       
 }

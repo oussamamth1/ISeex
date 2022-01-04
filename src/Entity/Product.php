@@ -2,21 +2,26 @@
 
 namespace App\Entity;
 use App\Entity\Category;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 use App\Repository\ProductRepository;
-use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\Collection;
 
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\MimeType;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
+use ApiPlatform\Core\Annotation\ApiResource;
 use Gedmo\Mapping\Driver\File as DriverFile;
 
+use Symfony\Component\HttpFoundation\File\File;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\MimeType;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Gedmo\Mapping\Annotation as Gedmo; // gedmo annotations
+
 /**
- * @ApiResource()
+ * @ApiResource(
+ *     collectionOperations={"get"={"normalization_context"={"groups"="conference:list"}}},
+ *     itemOperations={"get"={"normalization_context"={"groups"="conference:item"}}},
+ *     order={"category"="DESC", "publish"="ASC"},
+ *    paginationEnabled=false)
  * @ORM\Entity(repositoryClass=ProductRepository::class)
  * @Vich\Uploadable 
  */
@@ -27,28 +32,34 @@ class Product
      * @ORM\GeneratedValue
      *
      * @ORM\Column(type="integer")
+     * @Groups({"conference:list", "conference:item"})
      */
+    
     private $id;
 
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"conference:list", "conference:item"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=3)
+     * @Groups({"conference:list", "conference:item"})
      */
     private $price;
 
     /**
      * @Vich\UploadableField(mapping="product", fileNameProperty="image")
+     * 
      * @var File
      */
     private $imageFile;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"conference:list", "conference:item"})
      * @var string $image
      */
     private $image;
@@ -69,12 +80,14 @@ class Product
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="products")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups({"conference:list", "conference:item"})
      */
     private $category;
 
     /**
      * @ORM\Column(type="datetime")
      *  @Gedmo\Timestampable(on="create")
+     * 
 
      */
     private $createdAt;
@@ -87,6 +100,7 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="products")
+     * @Groups({"conference:list", "conference:item"})
      */
     private $publish;
 
@@ -94,11 +108,13 @@ class Product
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"conference:list", "conference:item"})
      */
     private $StatusF;
 
     /**
      * @ORM\ManyToOne(targetEntity=Client::class, inversedBy="typeClient")
+     * @Groups({"conference:list", "conference:item"})
      */
     private $client;
 

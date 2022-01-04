@@ -2,12 +2,14 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use App\Entity\Product;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Vich\UploaderBundle\Form\Type\VichImageType;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Assets;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\UrlField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -15,11 +17,12 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\NumberField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\CurrencyField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Text;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class ProductCrudController extends AbstractCrudController
 {
@@ -53,9 +56,50 @@ class ProductCrudController extends AbstractCrudController
             //ImageField::new('imageFile')->setBasePath($this->getParameter("app.path.product_images"))->onlyOnIndex(),
             //TextareaField::new('imageFile','update you image')->setFormType(VichImageType::class)->onlyWhenUpdating(),
 
-            ImageField::new('image',"product image")->setBasePath('/uploads/images/products/')->setUploadDir('/public/uploads/images/products/')->setUploadedFileNamePattern('[randomhash],[extension]')->setRequired(false),
+            ImageField::new('image',"product image")->setBasePath('/uploads/images/products/')->setUploadDir('/public/uploads/images/products/')->setUploadedFileNamePattern('[randomhash].[extension]')->setRequired(false),
          TextField::new('description'),
         ];}
+        public function configureActions(Actions $actions): Actions
+    {
+        // this action executes the 'renderInvoice()' method of the current CRUD controller
+        $viewInvoice = Action::new('viewInvoice', 'Invoice', 'fa fa-file-invoice')
+            ->linkToCrudAction('renderInvoice');
+
+        // if the method is not defined in a CRUD controller, link to its route
+        $sendInvoice = Action::new('sendInvoice', 'Send invoice', 'fa fa-envelope')
+            // if the route needs parameters, you can define them:
+            // 1) using an array
+            ->linkToRoute('invoice_send', [
+                'send_at' => (new \DateTime('+ 0 minutes'))->format('YmdHis'),
+            ])
+
+            // 2) using a callable (useful if parameters depend on the entity instance)
+            // (the type-hint of the function argument is optional but useful)
+            ->linkToRoute('invoice_send', function (User $order): array {
+                return [
+                    'uuid' => $order->getId(),
+                
+                ];
+            }
+        );
+
+      
+
+        return $actions
+            // ...
+            ->add(Crud::PAGE_DETAIL, $viewInvoice)
+            ->add(Crud::PAGE_DETAIL, $sendInvoice)
+            
+       
+            ;
+    }
+
+    public function renderInvoice(AdminContext $context)
+    {
+        $order = $context->getEntity()->getInstance();
+
+        // add your logic here...
+    }
        
     }
   

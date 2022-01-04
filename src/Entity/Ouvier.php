@@ -8,12 +8,14 @@ use Doctrine\ORM\Mapping\UniqueConstraint;
 use Symfony\Component\Validator\Constraints\Unique;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=OuvierRepository::class)
  * @UniqueEntity("matricule")
  */

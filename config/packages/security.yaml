@@ -14,6 +14,7 @@ security:
                 class: App\Entity\User
                 property: email
 
+
     firewalls:
         login:
             pattern: ^/api/login
@@ -50,7 +51,10 @@ security:
             remember_me:
                     secret: '%kernel.secret%'
                     path: /
-                    lifetime:  604800   
+                    lifetime:  604800 
+            # guard:
+            #     authenticators:
+            #         - AppBundle\Security\TokenAuthenticator                      
 
              
 

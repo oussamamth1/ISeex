@@ -9,6 +9,7 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 
 /**
@@ -23,11 +24,13 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"conference:list", "conference:item"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"conference:list", "conference:item"})
      */
     private $label;
 
@@ -87,6 +90,7 @@ class Category
 
         return $this;
     }
+   
     public function __toString()
     {
         return $this->label;

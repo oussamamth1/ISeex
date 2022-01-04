@@ -11,6 +11,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticatorManager;
 
 class SecurtityController extends AbstractController
 {
+
     /**
      *@Route("login", name="app_login")
      */
@@ -24,9 +25,9 @@ class SecurtityController extends AbstractController
        return $this->render('login_register_modal.html.twig',['lastusername'=>$lastName,'error'=>$error]);
       
        
-    //    return $this->json([
-    //     'user' => $this->getUser() ,'roles'=>$this->user->getRoles()]
-    // );
+       return $this->json([
+        'user' => $this->getUser() ,'roles'=>$this->user->getRoles()]
+    );
     }
     /**
      * @Route("/logout", name="app_logout")
@@ -51,4 +52,5 @@ class SecurtityController extends AbstractController
             'error'         => $error,
         ));
     }
+
 }
